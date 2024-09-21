@@ -1,0 +1,132 @@
+\section{Tasks}
+
+During this lab you will perform the following tasks:
+
+\begin{enumerate}
+
+\item Build the initial version of the application and evaluate performance and
+energy.
+
+\item Modify the provided source code to correctly implement the parallel
+options of the tool.
+
+\item Evaluate the parallel version that you have produced studying:
+
+\begin{enumerate}
+  \item The impact of the number of threads from 2 to the double of the physical
+number of cores.
+  \item The impact of different scheduling policies (optional). 
+\end{enumerate}
+
+\end{enumerate}
+
+\subsection{Building the initial version}
+
+Your first task is to build the original version of the software. You shall
+build only the release mode version. To do so use a script like the following
+\cppid{build.sh}:
+
+\lstinputlisting[language=bash]{lab/05-omp/build.sh}
+
+You will run this script in one node of the regular cluster by doing:
+
+\begin{lstlisting}[style=terminal]
+sbatch build.sh
+\end{lstlisting}
+
+To run a grayscale conversion, you may use the following script
+\cppid{run-gray.sh}:
+
+\lstinputlisting[language=bash]{lab/05-omp/run-gray.sh}
+
+The program will print the time in microseconds dedicated to the grayscale
+conversion and \textmark{perf} will give you the total execution time.
+With this two values you will be able to deduce which es the fraction of the
+program that can be improved when parallelizing the grayscale conversion.
+
+Now you can do the same thing by running the histogram computation with the
+script \cppid{run-histo.sh}:
+
+\lstinputlisting[language=bash]{lab/05-omp/run-histo.sh}
+
+\subsection{Using a NUMA node}
+
+Through the avignon front-end you may also use a high-end compute server (named
+\textmark{stan}).
+
+Prepare a script to see the hardware features of \textmark{stan} named
+\cppid{lscpu.sh}
+
+\lstinputlisting[language=bash]{lab/05-omp/lscpu.sh}
+
+Modify the previous scripts to repeat the previous exercise on \textmark{stan}.
+
+The new \cppid{build-stan.sh} should be:
+
+\lstinputlisting[language=bash]{lab/05-omp/build-stan.sh}
+
+The new script \cppid{run-gray-stan.sh} should be:
+
+\lstinputlisting[language=bash]{lab/05-omp/run-gray-stan.sh}
+
+The new script \cppid{run-histo-stan.sh} should be:
+
+\lstinputlisting[language=bash]{lab/05-omp/run-histo-stan.sh}
+
+\textbad{IMPORTANT}: To run a script on \textmark{stan} you need to specify the
+execution queue name.
+
+\begin{lstlisting}[style=terminal]
+sbatch -p stan script.sh
+\end{lstlisting}
+
+Deduce again which es the fraction of the program that can be improved when
+parallelizing the grayscale conversion and the histogram computation.
+
+\subsection{Parallel implementation}
+
+In this section you will parallelize the grayscale conversion and the histogram
+computation. You will modify the implementation in software component
+\cppid{parallel\_image}.
+
+Pay attention to the following member functions:
+
+\begin{itemize}
+
+\item \cppid{parallel\_image::to\_grayscale()}: Performs the grayscale
+conversion.
+\item \cppid{parallel\_image::generate\_histogram()}: Generates the histogram
+information.
+
+\end{itemize}
+
+Please do not forget the following:
+
+\begin{itemize}
+
+\item In the \cppid{CMakeLists.txt} at \textmark{img} folder you will need to
+add the following:
+
+\lstinputlisting{lab/05-omp/cmake-omp.txt}
+
+\item Do not specify the number of threads in the code. We will change that by
+using corresponding environment variable.
+
+\end{itemize}
+
+\subsection{Evaluation of the parallel version}
+
+In this section you will evaluate the obtained speedup both in a regular
+node and in \textmark{stan}.
+
+As an example, you may use the following script to run the grayscale conversion
+with different number of threads using the executable for \textmark{stan}:
+
+\lstinputlisting[language=bash]{lab/05-omp/run-gray-omp-stan.sh}
+
+You may run this on \textmark{stan} with the following command:
+
+\begin{lstlisting}[style=terminal]
+sbatch -p stan run-gray-omp-stan.sh
+\end{lstlisting}
+
