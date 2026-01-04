@@ -96,13 +96,13 @@ que generan una imagen en formato PBM del conjunto de Mandelbrot.
 
 \subsubsection{Transferencia de los archivos}
 
-En Aula Global encontrarás un archivo \cppid{mandel.zip} con toda el código que
+En Aula Global encontrarás un archivo \cppid{mandel.zip} con todo el código que
 necesitas. Coloca este archivo en un directorio en tu máquina local llamado
 \cppkey{lab2}. A continuación descomprime el archivo en un subdirectorio que
 se llamará \cppkey{mandel}:
 
 \begin{lstlisting}[style=terminal]
-usuario@maquina:~/lab2$ unzip mandel.zip mandel
+usuario@maquina:~/lab2$ unzip mandel.zip -d mandel
 Archive:  mandel.zip
   inflating: mandel/CMakeLists.txt   
   inflating: mandel/mandel.cpp       
@@ -117,7 +117,7 @@ Para transferir los archivos puedes usar el mandato \cppid{scp}.
 Primero crea en el directorio remoto un subdirectorio llamado \cppid{mandel}.
 
 \begin{lstlisting}[style=terminal]
-$usuario@avignon-frontened:/~lab2$ mkdir
+$usuario@avignon-frontened:/~lab2$ mkdir mandel
 $usuario@avignon-frontened:/~lab2$ ls
 mandel  runlscpu.sh  ...
 \end{lstlisting}
@@ -126,7 +126,7 @@ Colócate en el directorio donde hayas descargado el archivo \cppid{mandel.zip}
 y usa el siguiente mandato:
 
 \begin{lstlisting}[style=terminal,basicstyle=\tiny\ttfamily,columns=fixed]
-usuario@maquina:~/lab2$ scp mandel/* usuario@avignon.lab.inf.uc3m.es:~/lab2/mandel
+usuario@maquina:~/lab2$ scp -r mandel/* usuario@avignon.lab.inf.uc3m.es:~/lab2/mandel
 usuario@avignon.lab.inf.uc3m.es password: 
 CMakeLists.txt                            100%  427   166.6KB/s   00:00    
 mandel.cpp                                100% 2193   783.0KB/s   00:00    
@@ -160,32 +160,42 @@ cmake --build mandel-release
 \textbad{ACLARACIÓN}: A continuación se presenta una pequeña descripción
 de lo que hace cada uno de los mandatos
 
+\paragraph{Compilación de la versión de depuración}
+
 \begin{itemize}
-\begin{lstlisting}[style=terminal]
-cmake -S mandel -B mandel-debug -DCMAKE_BUILD_TYPE=Debug
-\end{lstlisting}
   \item Genera una configuración de proyecto en el directorio \cppid{mandel-debug}
         a partir de los archivos fuente del directorio \cppid{mandel}.
         Utiliza como opción la variable \cppkey{DCMAKE\_BUILD\_TYPE=Debug},
         que hace que se utilicen las opciones de compilación de depuración.
-
 \begin{lstlisting}[style=terminal]
-cmake -S mandel -B mandel-release -DCMAKE_BUILD_TYPE=Release
+cmake -S mandel -B mandel-debug -DCMAKE_BUILD_TYPE=Debug
 \end{lstlisting}
+\end{itemize}
+
+\paragraph{Compilación de la versión optimizada}
+
+\begin{itemize}
   \item Genera una configuración de proyecto en el directorio \cppid{mandel-release}
         a partir de los archivos fuente del directorio \cppid{mandel}.
         Utiliza como opción la variable \cppkey{DCMAKE\_BUILD\_TYPE=Release},
-        que hace que se utilicen las opciones de compilación de depuración.
+        que hace que se utilicen las opciones de compilación con optimizaciones.
+\begin{lstlisting}[style=terminal]
+cmake -S mandel -B mandel-release -DCMAKE_BUILD_TYPE=Release
+\end{lstlisting}
+\end{itemize}
 
+\paragraph{Construcción del proyecto}
+
+\begin{itemize}
+  \item Construye el proyecto generado en el directorio \cppid{mandel-debug}.
 \begin{lstlisting}[style=terminal]
 cmake --build mandel-debug
 \end{lstlisting}
-  \item Construye el proyecto generado en el directorio \cppid{mandel-debug}.
 
+  \item Construye el proyecto generado en el directorio \cppid{mandel-release}.
 \begin{lstlisting}[style=terminal]
 cmake --build mandel-release
 \end{lstlisting}
-  \item Construye el proyecto generado en el directorio \cppid{mandel-release}.
 
 \end{itemize}
 

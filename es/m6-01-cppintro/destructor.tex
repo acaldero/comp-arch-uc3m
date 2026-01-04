@@ -11,7 +11,7 @@
     \begin{itemize}
       \item No tiene tipo de retorno.
       \item No toma parámetros.
-      \item Nombre de clase precedido de carácter \textbf{\cppid{~}}.
+      \item Nombre de clase precedido de carácter \textbf{\cppid{\~}}.
     \end{itemize}
 \end{itemize}
 
@@ -52,7 +52,7 @@ void f() {
   }
   // ...
   for (int i=0; i<100; ++i) {
-    cout << v[i] << "\n";
+    std::println("{}", v[i]);
   }
 } // Invocación de destructor
 \end{lstlisting}
